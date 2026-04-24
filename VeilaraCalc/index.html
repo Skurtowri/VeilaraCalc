@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Veilara — Character Codex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Germania+One&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   RESET & DESIGN TOKENS
+═══════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Dark crimson background */
+  --bg:#1a0808;
+  --bg2:#220c0c;
+  --bg3:#2a1010;
+  /* Parchment panels */
+  --p:#f5ede0;--p2:#ece0cc;--p3:#e0cfb8;--p4:#d0bc9e;
+  --inp:#fdf7ee;
+  /* Crimson accent */
+  --crim:#8b1a1a;--crim2:#6e1212;--crim3:#b52020;
+  --crim-glow:rgba(139,26,26,.25);
+  /* Gold */
+  --gold:#c49a2e;--gold2:#9a7020;--gold3:#e0b84a;
+  --gold-glow:rgba(196,154,46,.22);
+  /* Status colours */
+  --red:#c0392b;--blue:#1a4e8a;--green:#1a6a38;
+  --purple:#5c35a8;--amber:#a05510;--pink:#962450;
+  /* Text */
+  --txt:#1a1510;--txt2:#46392a;--txt3:#7a6a56;
+  --inv:#f5e8cc;--inv2:#8a7060;
+  /* Borders */
+  --bdr:rgba(160,120,60,.25);--bdr2:rgba(160,120,60,.5);--bdr3:rgba(160,120,60,.8);
+  /* Radii */
+  --r:8px;--rlg:14px;--rxl:24px;
+  /* Fonts */
+  --fg:'Germania One',serif;--fh:'Cinzel',serif;--fhd:'Cinzel Decorative',serif;
+  --fb:'Crimson Pro',serif;--fm:'JetBrains Mono',monospace;
+  /* Race accent */
+  --race-col:#c49a2e;
+  --race-glow:rgba(196,154,46,.2);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:var(--fb);font-size:17px;line-height:1.75;min-height:100vh;overflow-x:hidden}
+
+/* ═══════════════════════════════════════════════
+   BACKGROUND — DARK CRIMSON ATMOSPHERE
+═══════════════════════════════════════════════ */
+.bg-atm{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 0% 0%,rgba(139,26,26,.45) 0%,transparent 50%),
+    radial-gradient(ellipse 70% 80% at 100% 100%,rgba(139,26,26,.35) 0%,transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 50%,rgba(196,154,46,.05) 0%,transparent 65%),
+    radial-gradient(ellipse 30% 30% at 15% 80%,rgba(139,26,26,.15) 0%,transparent 50%),
+    radial-gradient(ellipse 30% 30% at 85% 20%,rgba(139,26,26,.15) 0%,transparent 50%)}
+.bg-grid{position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(196,154,46,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(196,154,46,.04) 1px,transparent 1px),
+    linear-gradient(rgba(139,26,26,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(139,26,26,.04) 1px,transparent 1px);
+  background-size:80px 80px,80px 80px,20px 20px,20px 20px}
+/* Floating runes */
+.runes{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.rune{position:absolute;font-family:var(--fh);
+  color:rgba(196,154,46,.055);
+  animation:rFloat linear infinite;user-select:none}
+@keyframes rFloat{
+  0%{transform:translateY(110vh) rotate(0deg);opacity:0}
+  5%,95%{opacity:1}
+  100%{transform:translateY(-20vh) rotate(360deg);opacity:0}}
+
+/* ═══════════════════════════════════════════════
+   MEDIEVAL FRAME BORDER (full-page)
+═══════════════════════════════════════════════ */
+.page-border{
+  position:fixed;inset:6px;pointer-events:none;z-index:50;
+  border:2px solid rgba(196,154,46,.28);border-radius:4px;
+  box-shadow:inset 0 0 40px rgba(139,26,26,.08),0 0 20px rgba(139,26,26,.12)}
+.page-border::before{
+  content:'';position:absolute;inset:4px;
+  border:1px solid rgba(196,154,46,.1);border-radius:2px}
+/* Corner ornaments */
+.page-border::after{
+  content:'✦';
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  font-family:var(--fh);font-size:18px;color:rgba(196,154,46,.3);
+  background:var(--bg);padding:0 8px}
+.corner{position:absolute;width:28px;height:28px;pointer-events:none}
+.corner::before,.corner::after{content:'';position:absolute;background:rgba(196,154,46,.35)}
+.corner::before{width:100%;height:2px;top:0;left:0}
+.corner::after{width:2px;height:100%;top:0;left:0}
+.c-tl{top:-2px;left:-2px}
+.c-tr{top:-2px;right:-2px;transform:scaleX(-1)}
+.c-bl{bottom:-2px;left:-2px;transform:scaleY(-1)}
+.c-br{bottom:-2px;right:-2px;transform:scale(-1)}
+
+/* ═══════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════ */
+header{position:relative;z-index:20;
+  border-bottom:2px solid rgba(196,154,46,.3);
+  background:rgba(14,4,4,.98);backdrop-filter:blur(16px)}
+header::before{content:'';display:block;height:3px;
+  background:linear-gradient(90deg,transparent,var(--crim),var(--gold),var(--crim3),var(--gold),var(--crim),transparent)}
+.hdr{max-width:1080px;margin:0 auto;padding:18px 28px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.logo{display:flex;align-items:center;gap:16px}
+.logo-emblem{position:relative;width:70px;height:70px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-emblem::before{content:'';position:absolute;inset:0;
+  border:1.5px solid rgba(196,154,46,.35);border-radius:50%;
+  animation:espin 24s linear infinite}
+.logo-emblem::after{content:'';position:absolute;inset:6px;
+  border:1px solid rgba(139,26,26,.4);border-radius:50%}
+@keyframes espin{to{transform:rotate(360deg)}}
+.logo-star{font-size:24px;color:var(--gold);position:relative;z-index:1;
+  animation:starBreathe 3.5s ease-in-out infinite}
+@keyframes starBreathe{
+  0%,100%{text-shadow:0 0 8px rgba(196,154,46,.4);transform:scale(1) rotate(0deg)}
+  50%{text-shadow:0 0 24px rgba(196,154,46,.9),0 0 48px rgba(196,154,46,.3);transform:scale(1.1) rotate(36deg)}}
+.logo-texts{display:flex;flex-direction:column;gap:2px}
+.logo-name{font-family:var(--fg);font-size:22px;font-weight:400;color:var(--gold);
+  letter-spacing:.12em;line-height:1;
+  text-shadow:0 0 24px rgba(196,154,46,.6),0 2px 4px rgba(0,0,0,.7)}
+.logo-sub{font-family:var(--fb);font-size:11px;color:var(--inv2);
+  letter-spacing:.22em;text-transform:uppercase;font-style:italic}
+.hdr-deco{display:flex;align-items:center;gap:8px;opacity:.55}
+.hdr-deco-txt{font-family:var(--fh);font-size:11px;color:var(--gold2);letter-spacing:.08em}
+.hdr-line{width:48px;height:1px;background:linear-gradient(to right,transparent,var(--gold2))}
+.hdr-line.r{background:linear-gradient(to left,transparent,var(--gold2))}
+
+/* ═══════════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════════ */
+main{position:relative;z-index:1;max-width:1080px;margin:0 auto;
+  padding:40px 24px 130px;display:flex;flex-direction:column;gap:26px}
+
+/* ═══════════════════════════════════════════════
+   KEYFRAMES
+═══════════════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:none}}
+@keyframes popIn{
+  0%{opacity:0;transform:scale(.82) translateY(16px)}
+  65%{transform:scale(1.05) translateY(-4px)}
+  100%{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:none}}
+@keyframes shimIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes numPop{
+  0%{opacity:0;transform:scale(.6)}
+  70%{transform:scale(1.12)}
+  100%{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%,100%{transform:scale(1)}45%{transform:scale(1.15)}}
+@keyframes vitalIn{
+  from{opacity:0;transform:translateY(20px) scale(.9)}
+  to{opacity:1;transform:none}}
+@keyframes borderShimmer{
+  0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes celebPop{
+  0%{transform:scale(1)}30%{transform:scale(1.08)}60%{transform:scale(.97)}100%{transform:scale(1)}}
+@keyframes inkReveal{
+  from{clip-path:circle(0% at 50% 50%)}
+  to{clip-path:circle(150% at 50% 50%)}}
+@keyframes traitSlide{
+  from{opacity:0;transform:translateX(-14px)}
+  to{opacity:1;transform:none}}
+
+/* ═══════════════════════════════════════════════
+   PANELS — PARCHMENT WITH CRIMSON ACCENT
+═══════════════════════════════════════════════ */
+.panel{
+  background:var(--p);
+  border:1.5px solid var(--bdr2);
+  border-radius:var(--rlg);
+  padding:36px 30px 28px;
+  position:relative;
+  box-shadow:
+    0 3px 0 var(--bdr3),
+    0 6px 32px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.6),
+    inset 0 0 80px rgba(139,26,26,.025);
+  animation:fadeUp .55s cubic-bezier(.22,1,.36,1) both;
+  transition:box-shadow .3s,transform .25s}
+.panel:hover{
+  box-shadow:0 4px 0 var(--gold),0 12px 48px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.65);
+  transform:translateY(-3px)}
+/* Crimson top bar */
+.panel::before{
+  content:'';position:absolute;top:0;left:10px;right:10px;height:4px;
+  background:linear-gradient(90deg,transparent,var(--crim2),var(--crim3),var(--gold),var(--crim3),var(--crim2),transparent);
+  border-radius:0 0 3px 3px;opacity:.8}
+/* Corner flourishes + inner ring */
+.panel::after{
+  content:'';position:absolute;
+  top:8px;left:8px;right:8px;bottom:8px;
+  border:1px solid rgba(160,120,60,.12);
+  border-radius:10px;pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 30% at 50% 0%,rgba(196,154,46,.04) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 20% at 50% 100%,rgba(139,26,26,.03) 0%,transparent 70%)}
+/* Floating label */
+.plbl{
+  position:absolute;top:-14px;left:22px;
+  font-family:var(--fg);font-size:12px;font-weight:400;color:var(--gold3);
+  background:var(--p);padding:4px 16px;
+  letter-spacing:.18em;text-transform:uppercase;
+  border:1.5px solid rgba(196,154,46,.5);border-radius:20px;
+  text-shadow:0 0 12px rgba(196,154,46,.6);
+  box-shadow:0 0 18px rgba(196,154,46,.16),inset 0 1px 0 rgba(255,255,255,.9)}
+/* Sub-headings inside panels */
+.ph{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.phint{font-size:14px;color:var(--txt2);font-style:italic;font-weight:400}
+/* Ornamental divider */
+.orn{display:flex;align-items:center;gap:14px;margin:20px 0;opacity:.5}
+.orn::before,.orn::after{content:'';flex:1;height:1px;
+  background:linear-gradient(to right,transparent,var(--bdr3),transparent)}
+.orn-glyph{font-family:var(--fh);font-size:15px;color:var(--gold2)}
+
+/* ═══════════════════════════════════════════════
+   SECTION HEADER STAMP
+═══════════════════════════════════════════════ */
+.stamp{
+  font-family:var(--fh);font-size:14px;font-weight:700;
+  color:var(--crim2);letter-spacing:.12em;
+  display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.stamp::after{content:'';flex:1;height:1.5px;
+  background:linear-gradient(to right,rgba(139,26,26,.35),transparent)}
+
+/* ═══════════════════════════════════════════════
+   FORM INPUTS
+═══════════════════════════════════════════════ */
+.setup-grid{display:grid;grid-template-columns:76px 1fr 1fr 1fr 1fr;gap:18px;align-items:end}
+.fg{display:flex;flex-direction:column;gap:7px}
+.flbl{font-family:var(--fh);font-size:11px;color:var(--crim2);
+  letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.finput{
+  background:var(--inp);border:1.5px solid var(--bdr2);border-radius:var(--r);
+  color:var(--txt);font-family:var(--fb);font-size:15px;font-weight:600;
+  padding:11px 13px;width:100%;
+  transition:border-color .25s,box-shadow .25s,background .2s;
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.07),0 1px 0 rgba(255,255,255,.6)}
+.finput:hover{border-color:var(--bdr3)}
+.finput:focus{outline:none;border-color:var(--crim3);background:#fffcf5;
+  box-shadow:0 0 0 3px var(--crim-glow),inset 0 2px 4px rgba(0,0,0,.07)}
+.finput.narrow{max-width:76px}
+select.finput{
+  appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238b1a1a'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 13px center;
+  background-color:var(--inp);padding-right:34px;cursor:pointer}
+select.finput option{background:#fff;color:#1a1510;font-family:Georgia,serif;font-weight:normal}
+
+/* Race info bar */
+.race-bar{
+  margin-top:18px;padding:14px 18px;border-radius:var(--r);
+  border-left:4px solid var(--race-col);
+  background:linear-gradient(135deg,rgba(196,154,46,.05) 0%,rgba(139,26,26,.04) 100%);
+  transition:border-color .4s;animation:slideR .35s ease}
+.rb-name{font-family:var(--fhd);font-size:15px;color:var(--race-col);
+  letter-spacing:.07em;display:block;margin-bottom:6px;font-weight:700;
+  text-shadow:0 0 12px var(--race-glow)}
+.rb-langs{font-family:var(--fb);font-size:14px;color:var(--txt2);
+  font-style:italic;margin-bottom:8px}
+.rb-chips{display:flex;flex-wrap:wrap;gap:7px}
+.rchip{font-family:var(--fm);font-size:11px;padding:3px 10px;border-radius:20px;
+  border:1px solid var(--bdr2);color:var(--txt2);font-weight:500;letter-spacing:.04em}
+.rchip.asi{color:var(--green);border-color:rgba(26,106,56,.35);background:rgba(26,106,56,.07)}
+.rchip.spd{color:var(--blue);border-color:rgba(26,78,138,.35);background:rgba(26,78,138,.07)}
+.rchip.feat{color:var(--txt2);background:rgba(0,0,0,.04)}
+
+/* ═══════════════════════════════════════════════
+   ABILITY SCORES — TAPPABLE CHIPS + SLOTS
+═══════════════════════════════════════════════ */
+.array-intro{
+  font-size:15px;color:var(--txt2);font-style:italic;margin-bottom:18px;
+  padding:12px 16px;background:var(--p2);border-radius:var(--r);
+  border-left:4px solid var(--crim2);line-height:1.6}
+.array-intro strong{color:var(--crim2);font-style:normal}
+
+.arr-sect-lbl{font-family:var(--fh);font-size:11px;color:var(--gold);
+  letter-spacing:.16em;text-transform:uppercase;margin-bottom:12px;font-weight:700;
+  text-shadow:0 0 8px rgba(196,154,46,.35)}
+
+/* Pool of chips */
+.array-pool{
+  display:flex;flex-wrap:wrap;gap:12px;padding:14px 16px;
+  background:var(--p2);border-radius:var(--r);
+  border:1.5px solid var(--bdr2);margin-bottom:24px;min-height:64px;
+  align-items:center;position:relative}
+.pool-hint{position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  font-family:var(--fm);font-size:10px;color:var(--txt3);letter-spacing:.06em;
+  pointer-events:none}
+
+.chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:56px;height:50px;border-radius:var(--r);
+  background:var(--inp);border:2px solid var(--bdr2);
+  font-family:var(--fm);font-size:21px;font-weight:500;
+  color:var(--txt);cursor:pointer;position:relative;
+  box-shadow:0 3px 8px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.8);
+  transition:transform .18s,box-shadow .18s,border-color .18s,background .18s;
+  user-select:none;-webkit-user-select:none;
+  animation:popIn .45s cubic-bezier(.22,1,.36,1) both;
+  touch-action:manipulation}
+.chip::before{content:'';position:absolute;inset:0;border-radius:calc(var(--r) - 1px);
+  background:linear-gradient(135deg,rgba(255,255,255,.35) 0%,transparent 55%)}
+.chip:hover{transform:translateY(-5px) scale(1.1);
+  box-shadow:0 10px 24px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.8);
+  border-color:var(--gold)}
+.chip.sel{
+  background:linear-gradient(135deg,var(--crim3),var(--crim));
+  border-color:var(--crim2);color:#fff;
+  transform:scale(1.08) translateY(-3px);
+  box-shadow:0 6px 22px rgba(139,26,26,.5),0 0 0 3px rgba(139,26,26,.25),0 0 16px rgba(139,26,26,.2)}
+.chip.used{opacity:.28;cursor:default;transform:none!important;
+  box-shadow:none!important;border-color:var(--bdr)!important;
+  filter:grayscale(.5)}
+
+/* Stat slots grid */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.stat-row{display:flex;flex-direction:column;gap:6px}
+.stat-hdr{display:flex;align-items:baseline;gap:8px}
+.stat-abbr{font-family:var(--fm);font-size:12px;font-weight:500;
+  letter-spacing:.14em;text-transform:uppercase}
+.sa-str{color:var(--red)}.sa-dex{color:var(--blue)}.sa-con{color:var(--green)}
+.sa-int{color:var(--amber)}.sa-wis{color:var(--purple)}.sa-cha{color:var(--pink)}
+.stat-full-name{font-family:var(--fb);font-size:13px;color:var(--txt3);font-style:italic}
+
+.slot{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--p2);border:2px dashed var(--bdr2);
+  border-radius:var(--r);padding:10px 15px;min-height:54px;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:border-color .2s,background .2s,transform .15s;
+  touch-action:manipulation}
+.slot::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(196,154,46,.05));
+  opacity:0;transition:opacity .3s}
+.slot:hover{border-color:var(--gold);background:var(--p3);transform:scale(1.02)}
+.slot:hover::before{opacity:1}
+.slot.filled{border-style:solid;border-color:var(--bdr3)}
+.slot.filled:hover{border-color:rgba(184,50,40,.5)}
+.slot-num{font-family:var(--fm);font-size:28px;font-weight:700;color:var(--txt)}
+.slot-hint{font-size:13px;color:var(--txt3);font-style:italic}
+.slot-clear{font-family:var(--fh);font-size:10px;color:var(--red);
+  opacity:0;transition:opacity .2s;cursor:pointer;letter-spacing:.06em}
+.slot.filled:hover .slot-clear{opacity:1}
+.slot.filled:hover .slot-hint{opacity:0}
+
+.slot-below{display:flex;justify-content:space-between;padding:2px 4px;
+  font-family:var(--fm);font-size:12px;min-height:20px;font-weight:500}
+.sb-racial{color:var(--green)}.sb-mod{color:var(--blue)}
+
+/* ═══════════════════════════════════════════════
+   CALCULATE + RESET ROW
+═══════════════════════════════════════════════ */
+.calc-row{display:flex;justify-content:center;flex-direction:column;align-items:center;gap:14px}
+.calc-btn-group{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+.btn-calc{
+  display:flex;align-items:center;gap:18px;
+  background:linear-gradient(135deg,var(--p) 0%,var(--p2) 100%);
+  border:2px solid var(--gold2);border-radius:var(--rxl);
+  padding:20px 64px;cursor:pointer;
+  box-shadow:0 3px 0 var(--bdr3),0 6px 30px rgba(0,0,0,.22);
+  transition:transform .25s,box-shadow .25s,border-color .25s;
+  position:relative;overflow:hidden;touch-action:manipulation}
+.btn-calc::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(196,154,46,.15) 0%,transparent 70%);
+  opacity:0;transition:opacity .35s}
+.btn-calc:hover{border-color:var(--gold);transform:translateY(-5px);
+  box-shadow:0 3px 0 var(--gold),0 14px 44px rgba(0,0,0,.26)}
+.btn-calc:hover::before{opacity:1}
+.btn-calc:active{transform:translateY(-1px) scale(.99)}
+.btn-calc-txt{font-family:var(--fg);font-size:18px;font-weight:400;
+  color:var(--crim2);letter-spacing:.1em;position:relative}
+.btn-calc-star{font-family:var(--fh);font-size:20px;color:var(--gold);
+  position:relative;transition:transform .35s,text-shadow .35s}
+.btn-calc:hover .btn-calc-star{
+  transform:rotate(72deg) scale(1.25);
+  text-shadow:0 0 16px rgba(196,154,46,.9)}
+
+/* Reset button */
+.btn-reset{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(139,26,26,.08);
+  border:1.5px solid rgba(139,26,26,.3);border-radius:var(--r);
+  padding:13px 22px;cursor:pointer;
+  font-family:var(--fh);font-size:12px;color:var(--crim3);
+  letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  transition:background .2s,border-color .2s,transform .15s,box-shadow .2s;
+  touch-action:manipulation}
+.btn-reset:hover{background:rgba(139,26,26,.15);border-color:var(--crim3);
+  transform:translateY(-2px);box-shadow:0 4px 14px rgba(139,26,26,.2)}
+.btn-reset:active{transform:scale(.97)}
+.btn-reset-icon{font-size:18px;transition:transform .4s}
+.btn-reset:hover .btn-reset-icon{transform:rotate(-360deg)}
+
+#val-feedback{font-family:var(--fh);font-size:13px;color:var(--red);
+  letter-spacing:.07em;display:none;animation:shimIn .3s ease;text-align:center}
+
+/* ═══════════════════════════════════════════════
+   SKILLS
+═══════════════════════════════════════════════ */
+.pick-badge{
+  font-family:var(--fh);font-size:12px;padding:5px 16px;border-radius:20px;
+  background:rgba(26,78,138,.1);border:1.5px solid rgba(26,78,138,.28);
+  color:var(--blue);letter-spacing:.07em;white-space:nowrap;
+  transition:all .3s;font-weight:600}
+.pick-badge.done{background:rgba(26,106,56,.1);border-color:rgba(26,106,56,.35);color:var(--green)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+.slbl{font-family:var(--fh);font-size:11px;color:var(--txt3);
+  letter-spacing:.13em;text-transform:uppercase;margin-bottom:12px;font-weight:600}
+.chk-list{display:flex;flex-direction:column;gap:3px;
+  max-height:250px;overflow-y:auto;padding-right:4px}
+.chk-list::-webkit-scrollbar{width:3px}
+.chk-list::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:2px}
+.chkrow{display:flex;align-items:center;gap:10px;
+  padding:7px 10px;border-radius:var(--r);cursor:pointer;
+  transition:background .15s,transform .12s;
+  animation:slideR .3s ease both;touch-action:manipulation}
+.chkrow:hover{background:var(--p2);transform:translateX(4px)}
+.chkrow input[type=checkbox]{width:17px;height:17px;accent-color:var(--crim3);
+  cursor:pointer;flex-shrink:0}
+.chkrow label{font-size:15px;cursor:pointer;color:var(--txt2);
+  transition:color .15s;user-select:none;font-weight:500}
+.chkrow input:checked+label{color:var(--txt);font-weight:700}
+.auto-sk{font-family:var(--fb);font-size:15px;line-height:2.3;font-weight:600}
+.auto-sk.bg-s{color:var(--green)}.auto-sk.race-s{color:var(--purple);margin-top:8px}
+.mlbl{font-family:var(--fh);font-size:10px;color:var(--txt3);
+  letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+
+/* Validation error message */
+.val-msg{
+  display:none;background:rgba(184,50,40,.09);
+  border:1.5px solid rgba(184,50,40,.35);border-radius:var(--r);
+  padding:12px 16px;font-family:var(--fh);font-size:13px;
+  color:var(--red);letter-spacing:.06em;margin-top:14px;
+  animation:shimIn .3s ease}
+
+/* ═══════════════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════════════ */
+@keyframes resultsReveal{
+  from{opacity:0;transform:translateY(40px) scale(.97)}
+  to{opacity:1;transform:none}}
+.results-wrap{display:flex;flex-direction:column;gap:26px;
+  animation:resultsReveal .7s cubic-bezier(.22,1,.36,1) both}
+
+.res-hdr{display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 4px 14px;border-bottom:2px solid rgba(196,154,46,.22);margin-bottom:4px}
+.res-title{font-family:var(--fg);font-size:28px;font-weight:400;color:var(--inv);
+  letter-spacing:.08em;
+  text-shadow:0 0 40px rgba(196,154,46,.8),0 0 80px rgba(196,154,46,.3),0 2px 6px rgba(0,0,0,.6)}
+.char-badge{text-align:right}
+.lvl-pill{display:inline-block;font-family:var(--fh);font-size:12px;
+  padding:5px 16px;border-radius:20px;
+  background:rgba(196,154,46,.13);border:1.5px solid rgba(196,154,46,.4);
+  color:var(--gold);letter-spacing:.08em;margin-bottom:5px;
+  animation:popIn .5s ease both;font-weight:600}
+.char-id{font-family:var(--fb);font-size:14px;color:var(--inv2);
+  line-height:2;font-style:italic}
+
+/* ═══════════════════════════════════════════════
+   VITAL CARDS
+═══════════════════════════════════════════════ */
+.vitals-row{display:grid;grid-template-columns:repeat(6,1fr);gap:13px}
+.vcard{
+  background:var(--p);border:1.5px solid var(--bdr2);border-radius:var(--rlg);
+  padding:20px 10px 18px;text-align:center;
+  box-shadow:0 2px 0 var(--bdr3),0 5px 18px rgba(0,0,0,.18);
+  transition:transform .25s,box-shadow .25s;
+  animation:vitalIn .48s cubic-bezier(.22,1,.36,1) both;
+  position:relative;overflow:hidden}
+.vcard::before{content:'';position:absolute;top:0;left:10%;right:10%;height:4px;border-radius:0 0 3px 3px}
+.vcard:hover{transform:translateY(-6px);
+  box-shadow:0 2px 0 var(--bdr3),0 14px 32px rgba(0,0,0,.22)}
+.vcard:nth-child(1){animation-delay:.06s}.vcard:nth-child(2){animation-delay:.12s}
+.vcard:nth-child(3){animation-delay:.18s}.vcard:nth-child(4){animation-delay:.24s}
+.vcard:nth-child(5){animation-delay:.30s}.vcard:nth-child(6){animation-delay:.36s}
+.vc-hp::before{background:var(--red)}.vc-ac::before{background:var(--blue)}
+.vc-prof::before{background:var(--green)}.vc-spd::before{background:var(--amber)}
+.vc-init::before{background:var(--blue)}.vc-pp::before{background:var(--purple)}
+.vlbl{font-family:var(--fg);font-size:10px;text-transform:uppercase;
+  letter-spacing:.16em;color:var(--txt3);margin-bottom:10px;font-weight:400}
+.vval{font-family:var(--fm);font-size:34px;font-weight:700;line-height:1;
+  animation:numPop .4s ease both}
+.vc-hp .vval{color:var(--red);text-shadow:0 0 14px rgba(192,57,43,.35)}
+.vc-ac .vval{color:var(--blue);text-shadow:0 0 14px rgba(26,78,138,.3)}
+.vc-prof .vval{color:var(--green);text-shadow:0 0 14px rgba(26,106,56,.3)}
+.vc-spd .vval{color:var(--amber);text-shadow:0 0 14px rgba(160,85,16,.3)}
+.vc-init .vval{color:var(--blue);text-shadow:0 0 14px rgba(26,78,138,.3)}
+.vc-pp .vval{color:var(--purple);text-shadow:0 0 14px rgba(92,53,168,.3)}
+.vsub{font-size:11px;color:var(--txt3);margin-top:5px;font-style:italic;min-height:16px;font-weight:600}
+
+/* ═══════════════════════════════════════════════
+   SCORES TABLE
+═══════════════════════════════════════════════ */
+.info-banner{background:linear-gradient(135deg,var(--p2) 0%,var(--p3) 100%);
+  border:1px solid var(--bdr2);border-radius:var(--r);
+  padding:12px 16px;font-size:14px;color:var(--txt2);font-style:italic;
+  border-left:4px solid var(--gold3);margin-bottom:18px;font-weight:600;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.score-tbl{width:100%;border-collapse:collapse}
+.score-tbl th{font-family:var(--fh);font-size:10px;text-transform:uppercase;
+  letter-spacing:.14em;color:var(--txt3);padding:8px 10px;
+  text-align:right;border-bottom:2px solid var(--bdr2);font-weight:600}
+.score-tbl th:first-child{text-align:left}
+.score-tbl td{padding:11px 10px;font-family:var(--fm);font-size:14px;
+  text-align:right;border-bottom:1px solid rgba(0,0,0,.05);
+  color:var(--txt2);transition:background .15s;font-weight:500}
+.score-tbl td:first-child{text-align:left;color:var(--txt);font-weight:700}
+.score-tbl td.sc{font-size:20px;font-weight:700;color:var(--txt);text-align:center}
+.score-tbl tbody tr{animation:shimIn .35s ease both}
+.score-tbl tbody tr:nth-child(n){animation-delay:calc(n*.06s)}
+.score-tbl tbody tr:hover{background:var(--p2)}
+.mpos{color:var(--blue);font-weight:700;font-size:18px;text-shadow:0 0 8px rgba(26,78,138,.3)}.mneg{color:var(--red);font-weight:700;font-size:18px;text-shadow:0 0 8px rgba(192,57,43,.3)}
+.sdot{color:var(--green);font-size:14px}
+.sn{font-family:var(--fm);font-size:12px;letter-spacing:.12em;font-weight:700}
+.sf{font-family:var(--fb);font-size:12px;color:var(--txt3);font-style:italic;margin-left:6px}
+
+/* ═══════════════════════════════════════════════
+   TRAITS
+═══════════════════════════════════════════════ */
+.traits-list{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto}
+.ti{display:flex;align-items:flex-start;gap:11px;
+  padding:10px 14px;border-left:4px solid var(--bdr);
+  border-radius:0 var(--r) var(--r) 0;background:var(--p2);
+  transition:border-color .2s,transform .18s,background .2s;
+  animation:traitSlide .38s ease both}
+.ti:hover{border-color:var(--gold);transform:translateX(6px);background:var(--p3)}
+.ti.cls-t{border-left-color:rgba(26,78,138,.35)}
+.ti.cls-t:hover{border-left-color:var(--blue)}
+.ti.bg-t{border-left-color:rgba(160,85,16,.35)}
+.ti.bg-t:hover{border-left-color:var(--amber)}
+.tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:8px}
+.tdot.race{background:var(--race-col)}.tdot.cls{background:var(--blue)}.tdot.bg{background:var(--amber)}
+.tsrc{font-family:var(--fh);font-size:9px;padding:2px 7px;border-radius:10px;
+  text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;margin-right:4px;
+  align-self:flex-start;margin-top:5px;font-weight:600}
+.tsrc.race{background:rgba(196,154,46,.15);color:var(--gold2)}
+.tsrc.cls{background:rgba(26,78,138,.12);color:var(--blue)}
+.tsrc.bg{background:rgba(160,85,16,.12);color:var(--amber)}
+.tbody{font-size:15px;color:var(--txt2);line-height:1.7;font-weight:500}
+.tbody strong{color:var(--crim2);font-weight:700;text-shadow:0 0 1px rgba(110,18,18,.1)}
+
+/* ═══════════════════════════════════════════════
+   ALL SKILLS
+═══════════════════════════════════════════════ */
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 22px}
+.skrow{display:flex;align-items:center;justify-content:space-between;
+  padding:6px 10px;border-radius:var(--r);
+  transition:background .15s,transform .12s;
+  animation:shimIn .32s ease both}
+.skrow:hover{background:var(--p2);transform:translateX(5px)}
+.skrow.prof{background:rgba(26,106,56,.08)}
+.skrow.prof:hover{background:rgba(26,106,56,.15)}
+.skl{display:flex;align-items:center;gap:8px}
+.skdot{width:8px;height:8px;border-radius:50%;background:var(--bdr);flex-shrink:0;
+  transition:background .2s,transform .2s}
+.skdot.p{background:var(--green);transform:scale(1.35);
+  box-shadow:0 0 6px rgba(26,106,56,.45)}
+.skname{font-size:15px;color:var(--txt2);font-weight:600}
+.skattr{font-family:var(--fm);font-size:10px;color:var(--txt3);text-transform:uppercase}
+.skrow.prof .skname{color:var(--green);font-weight:700;text-shadow:0 0 6px rgba(26,106,56,.25)}
+.skval{font-family:var(--fm);font-size:14px;color:var(--txt3);
+  font-weight:500;min-width:30px;text-align:right}
+.skrow.prof .skval{color:var(--green);font-weight:700}
+
+/* ═══════════════════════════════════════════════
+   SPELLCASTING
+═══════════════════════════════════════════════ */
+.spell-box{
+  background:linear-gradient(135deg,rgba(92,53,168,.09) 0%,rgba(92,53,168,.05) 100%);
+  border:1.5px solid rgba(92,53,168,.25);border-radius:var(--rlg);
+  padding:22px 26px;animation:fadeUp .4s ease both;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45)}
+.spell-ttl{font-family:var(--fh);font-size:14px;color:#5230a0;
+  letter-spacing:.1em;margin-bottom:16px;font-weight:700;
+  display:flex;align-items:center;gap:12px}
+.spell-ttl::after{content:'';flex:1;height:1px;background:rgba(92,53,168,.2)}
+.spell-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:18px}
+.ss{text-align:center;padding:12px 8px;background:rgba(92,53,168,.07);
+  border-radius:var(--r);border:1px solid rgba(92,53,168,.14)}
+.ss-lbl{font-family:var(--fh);font-size:9px;color:#7a50c0;
+  text-transform:uppercase;letter-spacing:.14em;margin-bottom:6px;font-weight:600}
+.ss-val{font-family:var(--fm);font-size:22px;color:#5230a0;font-weight:500}
+.slot-hdr{font-family:var(--fh);font-size:11px;color:#7a50c0;
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px;font-weight:600}
+.slot-chips{display:flex;flex-wrap:wrap;gap:8px}
+.schip{font-family:var(--fb);font-size:14px;padding:5px 14px;
+  border-radius:20px;background:rgba(92,53,168,.12);
+  border:1.5px solid rgba(92,53,168,.24);color:#5230a0;font-weight:600}
+.spell-note{font-family:var(--fb);font-size:14px;color:#7a50c0;
+  font-style:italic;margin-top:12px;font-weight:500}
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════ */
+.st-row{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.legend{font-family:var(--fm);font-size:11px;color:var(--txt3);font-weight:500}
+
+footer{position:relative;z-index:1;
+  border-top:2px solid rgba(196,154,46,.15);
+  text-align:center;padding:24px;
+  font-family:var(--fh);font-size:13px;font-style:italic;
+  color:var(--inv2);letter-spacing:.08em}
+footer::before{content:'✦ ❧ ✦';display:block;font-size:16px;
+  color:rgba(196,154,46,.3);margin-bottom:8px;letter-spacing:.3em}
+
+.btn-clear-stats{
+  font-family:var(--fh);font-size:10px;font-weight:700;
+  color:var(--txt3);background:transparent;
+  border:1px solid var(--bdr2);border-radius:20px;
+  padding:4px 12px;cursor:pointer;letter-spacing:.1em;
+  transition:border-color .2s,color .2s,transform .15s;
+  touch-action:manipulation}
+.btn-clear-stats:hover{border-color:var(--crim3);color:var(--crim3);transform:scale(1.04)}
+.btn-clear-stats:active{transform:scale(.96)}
+
+/* ── ENHANCED POOL + CHIP STATES ── */
+.array-pool{
+  display:flex;flex-wrap:wrap;gap:12px;padding:14px 16px;
+  background:linear-gradient(135deg,var(--p2) 0%,var(--p3) 100%);
+  border-radius:var(--r);
+  border:1.5px solid var(--bdr2);
+  margin-bottom:24px;min-height:70px;align-items:center;position:relative;
+  box-shadow:inset 0 2px 6px rgba(0,0,0,.08)}
+.pool-hint{
+  font-family:var(--fh);font-size:10px;color:var(--txt3);
+  letter-spacing:.1em;pointer-events:none;font-style:italic}
+
+/* Slot empty glow when chip active */
+.slot.ready-for-drop{
+  border-color:var(--gold)!important;
+  background:rgba(196,154,46,.08)!important;
+  animation:borderShimmer 1s ease infinite}
+/* Slot fill animation */
+@keyframes slotFill{
+  0%{background:rgba(196,154,46,.2)}
+  100%{background:var(--p2)}}
+.slot.just-filled{animation:slotFill .5s ease}
+
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold2)}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media(max-width:900px){
+  .setup-grid{grid-template-columns:76px 1fr 1fr}
+  .vitals-row{grid-template-columns:repeat(3,1fr)}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .spell-stats{grid-template-columns:repeat(2,1fr)}
+  .skills-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:660px){
+  main{padding:20px 14px 80px;gap:20px}
+  .panel{padding:28px 18px 22px}
+  .plbl{left:16px}
+  .setup-grid{grid-template-columns:1fr 1fr;gap:12px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .two-col{grid-template-columns:1fr}
+  .vitals-row{grid-template-columns:repeat(2,1fr);gap:10px}
+  .vval{font-size:26px}
+  .st-row{grid-template-columns:1fr!important}
+  .spell-stats{grid-template-columns:repeat(2,1fr)}
+  .skills-grid{grid-template-columns:1fr}
+  .btn-calc{padding:16px 30px}
+  .btn-calc-txt{font-size:14px}
+  .hdr-deco{display:none}
+  .chip{width:50px;height:45px;font-size:19px}
+}
+@media(max-width:440px){
+  .stat-grid{grid-template-columns:1fr}
+  .vitals-row{grid-template-columns:repeat(2,1fr)}
+  .chip{width:46px;height:42px;font-size:17px}
+}
+
+/* ═══════════════════════════════════════════════
+   RACE PORTRAIT CARD
+═══════════════════════════════════════════════ */
+.race-portrait-wrap{
+  display:none;
+  margin-top:18px;
+  animation:portraitReveal .45s cubic-bezier(.22,1,.36,1) both}
+@keyframes portraitReveal{
+  from{opacity:0;transform:translateY(12px) scale(.96)}
+  to{opacity:1;transform:none}}
+.race-portrait-wrap.visible{display:flex;gap:20px;align-items:flex-start}
+.race-portrait-img-box{
+  position:relative;flex-shrink:0;
+  width:175px;height:200px;
+  border-radius:var(--rlg);
+  overflow:hidden;
+  border:2px solid var(--bdr2);
+  box-shadow:0 4px 20px rgba(0,0,0,.35),0 0 0 1px rgba(196,154,46,.15);
+  transition:transform .3s,box-shadow .3s}
+.race-portrait-img-box:hover{
+  transform:scale(1.04) translateY(-3px);
+  box-shadow:0 10px 32px rgba(0,0,0,.45),0 0 0 2px var(--race-col)}
+.race-portrait-img-box::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.55) 100%);
+  z-index:1;pointer-events:none}
+.race-portrait-img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:top center;
+  filter:sepia(.15) contrast(1.05);
+  transition:filter .4s,transform .4s}
+.race-portrait-img-box:hover .race-portrait-img{
+  filter:sepia(0) contrast(1.1);
+  transform:scale(1.06)}
+.race-portrait-label{
+  position:absolute;bottom:8px;left:0;right:0;
+  text-align:center;z-index:2;
+  font-family:var(--fg);font-size:13px;color:#fff;
+  text-shadow:0 1px 4px rgba(0,0,0,.8);
+  letter-spacing:.08em}
+.race-portrait-info{flex:1;display:flex;flex-direction:column;gap:0}
+
+/* ── SELECT HOVER ANIMATION ── */
+select.finput{
+  transition:border-color .25s,box-shadow .25s,background .2s,transform .15s!important}
+select.finput:hover{transform:translateY(-1px)}
+
+/* ── MORE HOVER ANIMATIONS ── */
+.slot{transition:border-color .2s,background .2s,transform .18s,box-shadow .2s!important}
+.slot:hover:not(.filled){
+  transform:scale(1.03) translateY(-2px)!important;
+  box-shadow:0 6px 18px rgba(0,0,0,.14)!important}
+.chip{transition:transform .18s cubic-bezier(.22,1,.36,1),box-shadow .18s,border-color .18s,background .18s,opacity .2s!important}
+.ti:hover{border-color:var(--gold)!important;transform:translateX(8px)!important;background:var(--p3)!important}
+.score-tbl tbody tr{transition:background .15s,transform .12s}
+.score-tbl tbody tr:hover{transform:translateX(3px)}
+.vcard{transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s!important}
+.vcard:hover{
+  transform:translateY(-8px) scale(1.03)!important;
+  box-shadow:0 2px 0 var(--bdr3),0 18px 38px rgba(0,0,0,.28)!important}
+.skrow:hover{background:var(--p2)!important;transform:translateX(6px)!important}
+.skrow.prof:hover{background:rgba(26,106,56,.16)!important}
+.panel:hover{transform:translateY(-4px)!important}
+.chkrow{transition:background .15s,transform .15s!important}
+.chkrow:hover{background:var(--p2)!important;transform:translateX(5px)!important}
+.rchip{transition:transform .15s,box-shadow .15s}
+.rchip:hover{transform:translateY(-2px);box-shadow:0 3px 8px rgba(0,0,0,.12)}
+
+/* Logo image */
+.logo-img{
+  height:56px;width:auto;
+  filter:drop-shadow(0 0 12px rgba(196,154,46,.5));
+  transition:filter .3s,transform .3s;
+  display:block}
+.logo-img:hover{
+  filter:drop-shadow(0 0 22px rgba(196,154,46,.85));
+  transform:scale(1.04)}
+</style>
+</head>
+<body>
+<div class="bg-atm"></div>
+<div class="bg-grid"></div>
+<div class="runes" id="rune-wrap"></div>
+<!-- Medieval page border -->
+<div class="page-border">
+  <div class="corner c-tl"></div>
+  <div class="corner c-tr"></div>
+  <div class="corner c-bl"></div>
+  <div class="corner c-br"></div>
+</div>
+
+<header>
+  <div class="hdr">
+    <div class="logo">
+      <a href="#" onclick="return false" style="display:flex;align-items:center;text-decoration:none">
+        <img src="logo.png" alt="The Isle of Veilara" class="logo-img">
+      </a>
+    </div>
+    <div class="hdr-deco">
+      <div class="hdr-line"></div>
+      <span class="hdr-deco-txt">⚔ &nbsp; 5e Homebrew &nbsp; ⚔</span>
+      <div class="hdr-line r"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ══ I. SETUP ══ -->
+<section class="panel" style="animation-delay:0s">
+  <div class="plbl">I — Character Setup</div>
+  <div class="setup-grid">
+    <div class="fg">
+      <label class="flbl" for="lvl">Level</label>
+      <input type="number" id="lvl" min="1" max="20" value="1" class="finput narrow">
+    </div>
+    <div class="fg">
+      <label class="flbl" for="race">Race</label>
+      <select id="race" class="finput"></select>
+    </div>
+    <div class="fg">
+      <label class="flbl" for="subrace">Subrace</label>
+      <select id="subrace" class="finput"></select>
+    </div>
+    <div class="fg">
+      <label class="flbl" for="cls">Class</label>
+      <select id="cls" class="finput"></select>
+    </div>
+    <div class="fg">
+      <label class="flbl" for="bg">Background</label>
+      <select id="bg" class="finput"></select>
+    </div>
+  </div>
+  <div id="race-bar" class="race-bar" style="display:none"></div>
+  <!-- Race portrait -->
+  <div class="race-portrait-wrap" id="race-portrait-wrap">
+    <div class="race-portrait-img-box" id="race-portrait-box">
+      <img id="race-portrait-img" class="race-portrait-img" src="" alt="">
+      <div class="race-portrait-label" id="race-portrait-lbl"></div>
+    </div>
+    <div class="race-portrait-info" id="race-portrait-info"></div>
+  </div>
+</section>
+
+<!-- ══ II. ABILITY SCORES ══ -->
+<section class="panel" style="animation-delay:.09s">
+  <div class="plbl">II — Ability Scores</div>
+  <div class="array-intro">
+    Assign the <strong style="font-family:var(--fg);font-size:16px;letter-spacing:.04em;color:var(--crim2)">Standard Array: 15 · 14 · 13 · 12 · 10 · 8</strong> to your stats. Tap a value to select it, then tap the stat box to assign it. Each value can only be used once.
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;margin-bottom:0">
+    <div class="arr-sect-lbl">Available Values — tap to select</div>
+    <button class="btn-clear-stats" onclick="clearAllStats()" id="btn-clear-stats">↺ Clear Stats</button>
+  </div>
+  <div class="array-pool" id="array-pool">
+    <span class="pool-hint">← tap a value, then tap a stat</span>
+  </div>
+  <div class="stat-grid" id="stat-grid"></div>
+</section>
+
+<!-- ══ III. SKILLS ══ -->
+<section class="panel" style="animation-delay:.18s">
+  <div class="plbl">III — Skill Proficiencies</div>
+  <div class="ph">
+    <p class="phint">Pick your class skills below — background &amp; racial skills are granted automatically</p>
+    <span class="pick-badge" id="pick-badge">Pick 2</span>
+  </div>
+  <div class="two-col">
+    <div>
+      <div class="slbl">Class Skill Options</div>
+      <div class="chk-list" id="cls-skills"></div>
+    </div>
+    <div>
+      <div class="slbl">Auto-Granted Proficiencies</div>
+      <div class="mlbl">From Background</div>
+      <div id="bg-auto" class="auto-sk bg-s"></div>
+      <div id="race-auto" class="auto-sk race-s" style="margin-top:8px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CALCULATE + RESET ══ -->
+<div class="calc-row">
+  <div class="calc-btn-group">
+    <button class="btn-calc" onclick="calculate()">
+      <span class="btn-calc-txt">Inscribe Character Sheet</span>
+      <span class="btn-calc-star">✦</span>
+    </button>
+    <button class="btn-reset" onclick="resetAll()" title="Start Over">
+      <span class="btn-reset-icon">↺</span>
+      <span>Reset</span>
+    </button>
+  </div>
+  <div id="val-feedback"></div>
+</div>
+
+<!-- ══ RESULTS ══ -->
+<div id="results" style="display:none">
+<div class="results-wrap">
+
+  <div class="res-hdr">
+    <div class="res-title">Character Codex</div>
+    <div class="char-badge">
+      <div><span class="lvl-pill" id="r-lvl">Level 1</span></div>
+      <div class="char-id" id="r-id"></div>
+    </div>
+  </div>
+
+  <!-- Vitals -->
+  <div class="vitals-row">
+    <div class="vcard vc-hp">
+      <div class="vlbl">Max Hit Points</div>
+      <div class="vval" id="r-hp">—</div>
+      <div class="vsub" id="r-hp-s"></div>
+    </div>
+    <div class="vcard vc-ac">
+      <div class="vlbl">Armor Class</div>
+      <div class="vval" id="r-ac">—</div>
+      <div class="vsub" id="r-ac-s"></div>
+    </div>
+    <div class="vcard vc-prof">
+      <div class="vlbl">Proficiency Bonus</div>
+      <div class="vval" id="r-prof">—</div>
+      <div class="vsub" id="r-prof-s"></div>
+    </div>
+    <div class="vcard vc-spd">
+      <div class="vlbl">Movement Speed</div>
+      <div class="vval" id="r-spd">—</div>
+      <div class="vsub" id="r-spd-s"></div>
+    </div>
+    <div class="vcard vc-init">
+      <div class="vlbl">Initiative</div>
+      <div class="vval" id="r-init">—</div>
+      <div class="vsub">DEX modifier</div>
+    </div>
+    <div class="vcard vc-pp">
+      <div class="vlbl">Passive Perception</div>
+      <div class="vval" id="r-pp">—</div>
+      <div class="vsub" id="r-pp-s"></div>
+    </div>
+  </div>
+
+  <!-- Spellcasting -->
+  <div id="spell-box" style="display:none" class="spell-box">
+    <div class="spell-ttl" id="spell-ttl">Spellcasting</div>
+    <div class="spell-stats" id="spell-stats"></div>
+    <div id="slots-section" style="display:none">
+      <div class="slot-hdr">Spell Slots</div>
+      <div class="slot-chips" id="slot-chips"></div>
+    </div>
+    <div class="spell-note" id="spell-note"></div>
+  </div>
+
+  <!-- Scores + Traits -->
+  <div class="st-row">
+    <div class="panel" style="padding-top:32px;animation-delay:.1s">
+      <div class="plbl">Ability Scores &amp; Saving Throws</div>
+      <div class="info-banner">Proficient saving throws marked ● — they include your proficiency bonus</div>
+      <table class="score-tbl">
+        <thead>
+          <tr><th>Ability</th><th style="text-align:center">Score</th><th>Modifier</th><th>Save</th></tr>
+        </thead>
+        <tbody id="scores-body"></tbody>
+      </table>
+    </div>
+    <div class="panel" style="padding-top:32px;animation-delay:.17s">
+      <div class="plbl">Traits, Features &amp; Abilities</div>
+      <div class="traits-list" id="traits-list"></div>
+    </div>
+  </div>
+
+  <!-- All Skills -->
+  <div class="panel" style="padding-top:32px;animation-delay:.24s">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <span style="font-family:var(--fh);font-size:14px;color:var(--crim2);letter-spacing:.14em;font-weight:700;text-shadow:0 0 8px rgba(110,18,18,.15)">All Skill Checks</span>
+      <span class="legend">● Proficient — adds proficiency bonus</span>
+    </div>
+    <div class="skills-grid" id="skills-out"></div>
+  </div>
+
+</div>
+</div>
+
+</main>
+<footer>Veilara 5e Homebrew &mdash; All rules follow standard D&amp;D 5e</footer>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  RUNE PARTICLES
+// ══════════════════════════════════════════════════════════
+(function(){
+  const R=['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ'];
+  const c=document.getElementById('rune-wrap');
+  for(let i=0;i<16;i++){
+    const r=document.createElement('span');r.className='rune';
+    r.textContent=R[Math.floor(Math.random()*R.length)];
+    r.style.left=Math.random()*100+'%';
+    r.style.fontSize=(14+Math.random()*30)+'px';
+    const d=20+Math.random()*30;
+    r.style.animationDuration=d+'s';
+    r.style.animationDelay=(-Math.random()*d)+'s';
+    c.appendChild(r);
+  }
+})();
+
+// ══════════════════════════════════════════════════════════
+//  RACE COLORS
+// ══════════════════════════════════════════════════════════
+const RACE_COLORS={
+  "Humanian":"#2a7ab8","Dwarken":"#7a5230","Scallion":"#2a7d32",
+  "Falenian":"#1560c0","Hadroan":"#4a2080","Tusker":"#a05510",
+  "Smiloborn":"#9a2840","Glimmer":"#008a8f","Lilliput":"#528b2f","Elvian":"#7b1fa2"
+};
+
+const RACE_PORTRAITS = {
+  "Dwarken":  "dwarkens.jpg",
+  "Falenian": "falenian.jpg",
+  "Hadroan":  "hadroans.jpg",
+  "Glimmer":  "glimmers.jpg",
+  "Tusker":  "tuskers.jpg",
+  "Scallion":  "scallions.jpg",
+  "Lilliput":  "lilliputs.jpg",
+  "Humanian":  "humanian.jpg",
+  "Elvian":  "elvians.jpg",
+  "Smiloborn":  "smiloborns.jpg"
+};
+
+function applyRaceColor(n){
+  const c=RACE_COLORS[n]||'#c49a2e';
+  document.documentElement.style.setProperty('--race-col',c);
+  const h=c.replace('#','');
+  const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);
+  document.documentElement.style.setProperty('--race-glow',`rgba(${r},${g},${b},.2)`);
+}
+
+// ══════════════════════════════════════════════════════════
+//  GAME DATA
+// ══════════════════════════════════════════════════════════
+const RACES={
+  "Humanian":{
+    asi:{str:1,dex:1,con:1,int:1,wis:1,cha:1},speed:30,size:"Medium",
+    traits:["Ability Scores: +1 to every ability score"],
+    langs:"Common + 2 of choice",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Jovarite":{asi:{},label:"Jovarite",
+        traits:["Steady Body: Advantage on saving throws to resist being knocked prone","Heavy Presence: Disadvantage on Dexterity (Stealth) checks in natural terrain"]},
+      "Venarine":{asi:{},label:"Venarine",
+        traits:["Toxin Resilience: Resistance to poison damage + advantage on saves vs being poisoned"]}
+    }},
+  "Dwarken":{asi:{con:2,str:1},speed:25,size:"Medium",nat_armor:true,
+    traits:[
+      "Natural Armor: AC = 12 + Dexterity modifier while not wearing armor",
+      "Heavy Frame: Difficult terrain costs an additional 5 ft of movement"
+    ],
+    langs:"Common, Dwarken",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Frost Dwarkens":{asi:{con:1},label:"Frost Dwarkens (+1 CON)",traits:["Cold Resistance: Resistance to cold damage"]},
+      "Magwarns":{asi:{str:1},label:"Magwarns (+1 STR)",traits:["Fire Resistance: Resistance to fire damage"]}
+    }},
+  "Scallion":{asi:{dex:2,wis:1},speed:30,size:"Medium",
+    traits:[
+      "Stalker's Gait: You ignore movement penalties caused by plant-based terrain",
+      "Patient Strike: You have advantage on Initiative rolls"
+    ],
+    langs:"Common, Scallion",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Raptoids":{asi:{dex:1},label:"Raptoids (+1 DEX) · +5 ft speed",traits:["Swift Pursuit: Your speed increases by 5 ft"],speed_bonus:5},
+      "Ceraknights":{asi:{str:1},label:"Ceraknights (+1 STR) · +1 AC",traits:["Plated Hide: +1 bonus to AC"],ac_bonus:1}
+    }},
+  "Falenian":{asi:{str:2,con:1},speed:25,swim:40,size:"Medium",
+    traits:[
+      "Deep Lungs: You can hold your breath for up to 1 hour",
+      "Echolocation: 10 ft blindsight while underwater only",
+      "Crushing Grip: Proficiency in Athletics checks while underwater"
+    ],
+    langs:"Common, Falenia",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Currenters":{asi:{con:1},label:"Currenters (+1 CON)",traits:["Bog Adaptation: Ignore difficult terrain from mud, swamp, or shallow water"]},
+      "Abyssians":{asi:{str:1},label:"Abyssians (+1 STR)",traits:["Cold Resistance: Resistance to cold damage"]}
+    }},
+  "Hadroan":{asi:{wis:2,dex:1},speed:30,darkvision:120,size:"Medium",
+    traits:[
+      "Darkvision: 120 ft",
+      "Silent Stride: Proficiency in the Stealth skill",
+      "Sunlight Sensitivity: Disadvantage on Wisdom (Perception) checks relying on sight in bright sunlight"
+    ],
+    skills:["Stealth"],langs:"Common, Hadroan",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Marsh-Hadroans":{asi:{dex:1},label:"Marsh-Hadroans (+1 DEX)",traits:["Mask of the Wild: You can attempt to hide even when only lightly obscured"]},
+      "Peak-Hadroans":{asi:{wis:1},label:"Peak-Hadroans (+1 WIS)",traits:["Keen Sight: Advantage on Perception checks in dim light or darkness"]}
+    }},
+  "Tusker":{asi:{str:2,con:1},speed:25,ac_bonus:1,size:"Medium",
+    traits:[
+      "Thick Hide: +1 bonus to AC (only while not wearing heavy armor)",
+      "Mass Authority: Count as one size larger for carrying capacity, grappling, pushing, and dragging",
+      "Heavy Build: Disadvantage on Dexterity (Stealth) checks"
+    ],
+    langs:"Common, Tusker",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Loxodons":{asi:{str:1},label:"Loxodons (+1 STR)",traits:["Open Stride: Ignore difficult terrain when moving in a straight line"]},
+      "Mammuthus":{asi:{con:1},label:"Mammuthus (+1 CON)",traits:["Glacial Blood: Resistance to cold damage"]}
+    }},
+  "Smiloborn":{asi:{str:2,con:1},speed:30,size:"Medium",
+    traits:[
+      "Natural Weapons: Your fangs deal 1d4 + Strength modifier piercing damage",
+      "Tenacity: When reduced to 0 HP but not killed outright, drop to 1 HP instead (once per long rest)"
+    ],
+    langs:"Common, Smiloborn",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Primal-Fang":{asi:{str:1},label:"Primal-Fang (+1 STR)",traits:["Scent Tracker: Advantage on Wisdom (Survival) checks to track creatures"]},
+      "Code-Fang":{asi:{con:1},label:"Code-Fang (+1 CON)",traits:["Protective Presence: When an ally within 5 ft is hit, use your reaction to impose disadvantage on that attack roll. Attacker rerolls, must use new result. Once per short rest."]}
+    }},
+  "Glimmer":{asi:{int:2,con:1},speed:30,size:"Medium",
+    traits:[
+      "Seismic Sense: You have Blindsight with a range of 40 ft.  Beyond this, you rely on your normal senses. Blindsight lets you perceive something within range. It does not penetrate total cover.",
+      "Structural Awareness: Proficiency in the Investigation skill"
+    ],
+    skills:["Investigation"],langs:"Common, Glimmer",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Canopy-Clipper":{asi:{dex:1},label:"Canopy-Clipper (+1 DEX) · Climbing",traits:["Climber: You gain a climbing speed equal to your walking speed"]},
+      "Void-Glimmer":{asi:{wis:1},label:"Void-Glimmer (+1 WIS) · Tremorsense",traits:["Tremor Sense: You gain tremorsense out to 10 ft — detect movement through surfaces you touch"]}
+    }},
+  "Lilliput":{asi:{dex:2,wis:1},speed:25,size:"Small",
+    traits:[
+      "Slip Through: Once per turn, impose disadvantage on one opportunity attack made against you",
+      "People Sense: Proficiency in the Insight skill"
+    ],
+    skills:["Insight"],langs:"Common, Lilliput",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Meadoputs":{asi:{dex:1},label:"Meadoputs (+1 DEX)",traits:["Chain Leap: Once per turn, after landing from a jump you may make one additional jump using remaining movement normally"]},
+      "Hearthputs":{asi:{cha:1},label:"Hearthputs (+1 CHA) · +Persuasion",traits:["Emotional Read: Proficiency in the Persuasion skill"],skills:["Persuasion"]}
+    }},
+  "Elvian":{asi:{int:2,wis:1},speed:30,darkvision:60,size:"Medium",
+    traits:[
+      "Darkvision: 60 ft",
+      "Chronicle Mind: Proficiency in the History skill",
+      "Arcane Discipline: Advantage on saving throws against being charmed",
+      "Frail Form: Disadvantage on Strength saving throws"
+    ],
+    skills:["History"],langs:"Common, Elvish + 1 of your choice",
+    subraces:{
+      "(No Subrace)":{asi:{},label:"(No Subrace)",traits:[]},
+      "Rune Elf":{asi:{int:1},label:"Rune Elf (+1 INT) · Identify",traits:["Arcane Notation: Cast Identify once per long rest without a spell slot or material components (INT is spellcasting ability)"]},
+      "Warden Elf":{asi:{wis:1},label:"Warden Elf (+1 WIS) · Reroll",traits:["Living Archive: Once per long rest, when you fail a History, Intelligence, or Arcana check, reroll and take the new result"]}
+    }}
+};
+
+const CLASSES={
+  "Fighter":{hd:10,saves:["str","con"],pick:2,
+    label:"Fighter — d10 · STR or DEX · Saves: STR, CON",
+    skills:["Athletics","Acrobatics","Animal Handling","History","Insight","Intimidation","Perception","Survival"],
+    features:["Fighting Style: Choose one — +1 to attack rolls, +1 AC, or +2 melee damage","Second Wind: Regain 1d10 + your level in HP as a bonus action (1/short or long rest)"]},
+  "Barbarian":{hd:12,saves:["str","con"],pick:2,
+    label:"Barbarian — d12 · STR · Saves: STR, CON",
+    skills:["Animal Handling","Athletics","Intimidation","Nature","Perception","Survival"],
+    features:["Rage: Bonus action — enter Rage (2 uses/long rest). While raging: resistance to bludgeoning, piercing, slashing damage + bonus STR melee damage. Ends if you don't attack or take damage on your turn."]},
+  "Rogue":{hd:8,saves:["dex","int"],pick:4,
+    label:"Rogue — d8 · DEX · Saves: DEX, INT",
+    skills:["Acrobatics","Athletics","Deception","Insight","Intimidation","Investigation","Perception","Performance","Persuasion","Sleight of Hand","Stealth"],
+    features:["Sneak Attack: Once per turn — extra 1d6 damage when you have advantage OR an ally is within 5 ft of your target","Cunning Action: Bonus action — Dash, Disengage, or Hide"]},
+  "Monk":{hd:8,saves:["str","dex"],pick:2,
+    label:"Monk — d8 · DEX & WIS · Saves: STR, DEX",
+    skills:["Acrobatics","Athletics","History","Insight","Religion","Stealth"],
+    features:["Martial Arts: After the Attack action, make one unarmed strike as a bonus action"]},
+  "Ranger":{hd:10,saves:["dex","wis"],pick:3,
+    label:"Ranger — d10 · DEX & WIS · Saves: DEX, WIS",
+    skills:["Animal Handling","Athletics","Insight","Investigation","Nature","Perception","Stealth","Survival"],
+    features:["Natural Explorer: Advantage on tracking and survival checks in natural environments"],
+    spell:{ab:"wis",type:"Half",start:2}},
+  "Paladin":{hd:10,saves:["wis","cha"],pick:2,
+    label:"Paladin — d10 · STR & CHA · Saves: WIS, CHA",
+    skills:["Athletics","Insight","Intimidation","Medicine","Persuasion","Religion"],
+    features:["Lay on Hands: Touch a creature to restore HP from a pool of 5 × your level (action)"],
+    spell:{ab:"cha",type:"Half",start:2}},
+  "Cleric":{hd:8,saves:["wis","cha"],pick:2,
+    label:"Cleric — d8 · WIS · Saves: WIS, CHA",
+    skills:["History","Insight","Medicine","Persuasion","Religion"],
+    features:[],spell:{ab:"wis",type:"Full",start:1,cantrips:3}},
+  "Druid":{hd:8,saves:["wis","dex"],pick:2,
+    label:"Druid — d8 · WIS · Saves: WIS, DEX",
+    skills:["Arcana","Animal Handling","Insight","Medicine","Nature","Perception","Survival"],
+    features:[],spell:{ab:"wis",type:"Full",start:1,cantrips:2}},
+  "Wizard":{hd:6,saves:["int","wis"],pick:2,
+    label:"Wizard — d6 · INT · Saves: INT, WIS",
+    skills:["Arcana","History","Insight","Investigation","Medicine","Religion"],
+    features:[],spell:{ab:"int",type:"Full",start:1,cantrips:3}},
+  "Sorcerer":{hd:6,saves:["con","cha"],pick:2,
+    label:"Sorcerer — d6 · CHA · Saves: CON, CHA",
+    skills:["Arcana","Deception","Insight","Intimidation","Persuasion"],
+    features:[],spell:{ab:"cha",type:"Full",start:1,cantrips:4}},
+  "Warlock":{hd:8,saves:["wis","cha"],pick:2,
+    label:"Warlock — d8 · CHA · Saves: WIS, CHA",
+    skills:["Arcana","Deception","History","Intimidation","Investigation","Religion"],
+    features:[],spell:{ab:"cha",type:"Pact",start:1,cantrips:2,shortRest:true}},
+  "Bard":{hd:8,saves:["dex","cha"],pick:3,
+    label:"Bard — d8 · CHA · Saves: DEX, CHA",
+    skills:["ALL"],
+    features:["Bardic Inspiration: Bonus action — give an ally a Bardic Inspiration die to add to one roll within 10 minutes"],
+    spell:{ab:"cha",type:"Full",start:1,cantrips:2}},
+  "Artificer":{hd:8,saves:["con","int"],pick:2,
+    label:"Artificer — d8 · INT · Saves: CON, INT",
+    skills:["Arcana","History","Investigation","Medicine","Nature","Perception","Sleight of Hand"],
+    features:["Magic Tinkering: Imbue a tiny nonmagical object with a minor magical effect (action)"],
+    spell:{ab:"int",type:"Half",start:1}}
+};
+
+const BACKGROUNDS={
+  "Veteran":    {label:"Veteran (Athletics, Intimidation)",skills:["Athletics","Intimidation"],feat:"Rank: Military forces recognize your experience and offer cooperation."},
+  "Warden":     {label:"Warden (Perception, Insight)",skills:["Perception","Insight"],feat:"Authority: Commoners and guards cooperate when you present official authority."},
+  "Shadow":     {label:"Shadow (Deception, Stealth)",skills:["Deception","Stealth"],feat:"Contact: You maintain a reliable criminal contact who can provide information or illicit access."},
+  "Wayfinder":  {label:"Wayfinder (Survival, Perception)",skills:["Survival","Perception"],feat:"Safe Passage: Identify safer routes and avoid obvious natural dangers during travel."},
+  "Adept":      {label:"Adept (Insight, Religion)",skills:["Insight","Religion"],feat:"Sanctuary: Temples and aligned orders offer you basic shelter and aid."},
+  "Scribe":     {label:"Scribe (History, Investigation)",skills:["History","Investigation"],feat:"Research: You know where and how to locate information if it exists."},
+  "Trader":     {label:"Trader (Persuasion, Insight)",skills:["Persuasion","Insight"],feat:"Markets: Find buyers, sellers, and fair prices in most settlements."},
+  "Artisan":    {label:"Artisan (Investigation, Persuasion)",skills:["Investigation","Persuasion"],feat:"Guild Membership: Craft networks provide lodging, work, and minor assistance."},
+  "Laborer":    {label:"Laborer (Athletics, Survival)",skills:["Athletics","Survival"],feat:"Work: Always find basic labor and simple shelter in settlements."},
+  "Reclaimer":  {label:"Reclaimer (Investigation, Athletics)",skills:["Investigation","Athletics"],feat:"Salvage: You can locate useful materials or minor valuables in ruins and debris."},
+  "Outrider":   {label:"Outrider (Animal Handling, Survival)",skills:["Animal Handling","Survival"],feat:"Relay: Secure mounts, directions, or minor assistance from outposts and travelers."},
+  "Entertainer":{label:"Entertainer (Performance, Acrobatics)",skills:["Performance","Acrobatics"],feat:"Audience: You can find places to perform and earn modest food and lodging."},
+  "Exiled":     {label:"Exiled (Stealth, Survival)",skills:["Stealth","Survival"],feat:"Unwelcome Name: In places tied to your past your identity carries consequences — but elsewhere you can more easily disappear or assume anonymity."},
+  "Beast-Tamer":{label:"Beast-Tamer (Animal Handling, Survival)",skills:["Animal Handling","Survival"],feat:"Bonded Beast: You have a trained companion creature or strong rapport with wild beasts."},
+  "Hunter":     {label:"Hunter (Survival, Perception)",skills:["Survival","Perception"],feat:"Forage: You can reliably find food, clean water, and basic shelter in natural environments, provided resources are present."}
+};
+
+const ALL_SKILLS=[
+  ["Acrobatics","dex"],["Animal Handling","wis"],["Arcana","int"],["Athletics","str"],
+  ["Deception","cha"],["History","int"],["Insight","wis"],["Intimidation","cha"],
+  ["Investigation","int"],["Medicine","wis"],["Nature","int"],["Perception","wis"],
+  ["Performance","cha"],["Persuasion","cha"],["Religion","int"],["Sleight of Hand","dex"],
+  ["Stealth","dex"],["Survival","wis"]
+];
+const STATS=["str","dex","con","int","wis","cha"];
+const SNAMES={str:"Strength",dex:"Dexterity",con:"Constitution",int:"Intelligence",wis:"Wisdom",cha:"Charisma"};
+const SARR=[15,14,13,12,10,8];
+const SLOTS={
+  Full:[null,[2,0,0,0,0,0,0,0,0],[3,0,0,0,0,0,0,0,0],[4,2,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],[4,3,2,0,0,0,0,0,0],[4,3,3,0,0,0,0,0,0],[4,3,3,1,0,0,0,0,0],[4,3,3,2,0,0,0,0,0],[4,3,3,3,1,0,0,0,0],[4,3,3,3,2,0,0,0,0],[4,3,3,3,2,1,0,0,0],[4,3,3,3,2,1,0,0,0],[4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,0,0],[4,3,3,3,2,1,1,1,0],[4,3,3,3,2,1,1,1,0],[4,3,3,3,2,1,1,1,1],[4,3,3,3,3,1,1,1,1],[4,3,3,3,3,2,1,1,1],[4,3,3,3,3,2,2,1,1]],
+  Half:[null,[0,0,0,0,0,0,0,0,0],[2,0,0,0,0,0,0,0,0],[3,0,0,0,0,0,0,0,0],[3,0,0,0,0,0,0,0,0],[4,2,0,0,0,0,0,0,0],[4,2,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],[4,3,2,0,0,0,0,0,0],[4,3,2,0,0,0,0,0,0],[4,3,3,0,0,0,0,0,0],[4,3,3,0,0,0,0,0,0],[4,3,3,1,0,0,0,0,0],[4,3,3,1,0,0,0,0,0],[4,3,3,2,0,0,0,0,0],[4,3,3,2,0,0,0,0,0],[4,3,3,3,1,0,0,0,0],[4,3,3,3,1,0,0,0,0],[4,3,3,3,2,0,0,0,0],[4,3,3,3,2,0,0,0,0]],
+  Pact:[null,[1,0,0,0,0,0,0,0,0],[2,0,0,0,0,0,0,0,0],[2,0,0,0,0,0,0,0,0],[2,0,0,0,0,0,0,0,0],[2,1,0,0,0,0,0,0,0],[2,2,0,0,0,0,0,0,0],[2,2,0,0,0,0,0,0,0],[2,2,0,0,0,0,0,0,0],[2,2,0,0,0,0,0,0,0],[2,2,0,0,0,0,0,0,0],[3,2,0,0,0,0,0,0,0],[3,2,0,0,0,0,0,0,0],[3,2,0,0,0,0,0,0,0],[3,2,0,0,0,0,0,0,0],[3,2,0,0,0,0,0,0,0],[3,2,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0],[4,3,0,0,0,0,0,0,0]]
+};
+
+// ══════════════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════════════
+const abMod=s=>Math.floor((s-10)/2);
+const fmt=m=>(m>=0?'+':'')+m;
+const profB=lv=>Math.floor((lv-1)/4)+2;
+const $=id=>document.getElementById(id);
+
+function getRD(){
+  const rn=$('race').value,srn=$('subrace').value;
+  const r=RACES[rn];if(!r)return null;
+  const sr=(r.subraces&&r.subraces[srn])||{};
+  return{r,sr,rn,srn};
+}
+function getASI(){
+  const rd=getRD();if(!rd)return{};
+  const a={str:0,dex:0,con:0,int:0,wis:0,cha:0};
+  const add=o=>{if(!o)return;for(const k in o)if(a[k]!==undefined)a[k]+=o[k];};
+  add(rd.r.asi||{});add(rd.sr.asi||{});
+  return a;
+}
+
+// ══════════════════════════════════════════════════════════
+//  STANDARD ARRAY UI
+// ══════════════════════════════════════════════════════════
+const asgn={str:null,dex:null,con:null,int:null,wis:null,cha:null};
+let activeVal=null;
+
+function buildArrayUI(){
+  const pool=$('array-pool');pool.innerHTML='<span class="pool-hint">← tap to select</span>';
+  SARR.forEach((v,i)=>{
+    const c=document.createElement('div');
+    c.className='chip';c.textContent=v;c.dataset.v=v;
+    c.style.animationDelay=(i*.055)+'s';
+    c.addEventListener('click',()=>onChipClick(c,v));
+    pool.appendChild(c);
+  });
+  const g=$('stat-grid');g.innerHTML='';
+  STATS.forEach(s=>{
+    const w=document.createElement('div');w.className='stat-row';
+    const h=document.createElement('div');h.className='stat-hdr';
+    const ab=document.createElement('div');ab.className=`stat-abbr sa-${s}`;ab.textContent=s.toUpperCase();
+    const fn=document.createElement('div');fn.className='stat-full-name';fn.textContent=SNAMES[s];
+    h.appendChild(ab);h.appendChild(fn);
+    const sl=document.createElement('div');sl.className='slot';sl.id='sl_'+s;
+    const num=document.createElement('span');num.className='slot-num';num.textContent='—';
+    const rhs=document.createElement('div');rhs.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:3px';
+    const hint=document.createElement('span');hint.className='slot-hint';hint.textContent='tap to assign';
+    const clr=document.createElement('span');clr.className='slot-clear';clr.textContent='✕ clear';
+    clr.addEventListener('click',e=>{e.stopPropagation();clearSlot(s);});
+    rhs.appendChild(hint);rhs.appendChild(clr);
+    sl.appendChild(num);sl.appendChild(rhs);
+    sl.addEventListener('click',()=>onSlotClick(s));
+    const bl=document.createElement('div');bl.className='slot-below';bl.id='bl_'+s;
+    w.appendChild(h);w.appendChild(sl);w.appendChild(bl);
+    g.appendChild(w);
+  });
+  refreshSlots();
+}
+
+function onChipClick(chip,val){
+  const ex=Object.entries(asgn).find(([,v])=>v===val);
+  if(ex){
+    const sl=$('sl_'+ex[0]);
+    sl.style.outline='3px solid rgba(196,154,46,.6)';
+    setTimeout(()=>sl.style.outline='',700);
+    return;
+  }
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+  if(activeVal===val){
+    activeVal=null;
+    document.querySelectorAll('.slot').forEach(s=>s.classList.remove('ready-for-drop'));
+    return;
+  }
+  chip.classList.add('sel');
+  activeVal=val;
+  document.querySelectorAll('.slot').forEach(s=>{
+    if(!s.classList.contains('filled')) s.classList.add('ready-for-drop');
+    else s.classList.remove('ready-for-drop');
+  });
+}
+
+function onSlotClick(stat){
+  if(activeVal===null)return;
+  if(asgn[stat]!==null)restoreChip(asgn[stat]);
+  asgn[stat]=activeVal;
+  document.querySelectorAll('.chip').forEach(c=>{
+    if(parseInt(c.dataset.v)===activeVal){c.classList.remove('sel');c.classList.add('used');}
+  });
+  activeVal=null;
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('ready-for-drop'));
+  const justFilled=$('sl_'+stat);
+  if(justFilled){justFilled.classList.add('just-filled');setTimeout(()=>justFilled.classList.remove('just-filled'),600);}
+  refreshSlots();liveUpdate();
+  if(STATS.every(s=>asgn[s]!==null)){
+    const btn=document.querySelector('.btn-calc');
+    btn.style.animation='celebPop .5s ease';
+    setTimeout(()=>btn.style.animation='',600);
+  }
+}
+
+function clearSlot(s){
+  if(asgn[s]===null)return;
+  restoreChip(asgn[s]);asgn[s]=null;
+  refreshSlots();liveUpdate();
+}
+function restoreChip(val){
+  document.querySelectorAll('.chip').forEach(c=>{
+    if(parseInt(c.dataset.v)===val)c.classList.remove('used','sel');
+  });
+}
+
+function refreshSlots(){
+  const asi=getASI();
+  STATS.forEach(s=>{
+    const sl=$('sl_'+s);if(!sl)return;
+    const bl=$('bl_'+s);
+    const base=asgn[s];const bon=asi[s]||0;
+    const num=sl.querySelector('.slot-num');
+    const hint=sl.querySelector('.slot-hint');
+    if(base!==null){
+      num.textContent=base;
+      num.style.animation='numPop .35s ease';
+      setTimeout(()=>num.style.animation='',450);
+      hint.textContent='';sl.classList.add('filled');
+      const tot=base+bon;const m=abMod(tot);
+      bl.innerHTML=(bon>0?`<span class="sb-racial">+${bon} racial</span>`:'<span></span>')+
+        `<span class="sb-mod">Total: ${tot} (${fmt(m)})</span>`;
+    }else{
+      num.textContent='—';hint.textContent='tap to assign';
+      sl.classList.remove('filled');bl.innerHTML='';
+    }
+  });
+}
+
+function clearAllStats(){
+  STATS.forEach(s=>asgn[s]=null);
+  activeVal=null;
+  buildArrayUI();
+  refreshSlots();
+  liveUpdate();
+}
+
+function resetAll(){
+  STATS.forEach(s=>asgn[s]=null);
+  activeVal=null;
+  $('lvl').value=1;
+  $('race').selectedIndex=0;
+  buildArrayUI();
+  initSubraces();
+  initClsSkills();
+  updateBgAuto();
+  updateRaceAuto();
+  liveUpdate();
+  $('results').style.display='none';
+  $('val-feedback').style.display='none';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════════════════
+//  DROPDOWN POPULATION
+// ══════════════════════════════════════════════════════════
+function asiStr(o){
+  if(!o)return'';
+  return['str','dex','con','int','wis','cha'].filter(k=>o[k]).map(k=>`+${o[k]} ${k.toUpperCase()}`).join(', ');
+}
+
+function initRaces(){
+  const sel=$('race');sel.innerHTML='';
+  Object.entries(RACES).forEach(([n,d])=>{
+    const o=document.createElement('option');o.value=n;
+    const a=asiStr(d.asi);
+    o.textContent=`${n}  (${a||'see subraces'})  ·  ${d.speed}ft  ·  ${d.size}`;
+    sel.appendChild(o);
+  });
+  sel.addEventListener('change',()=>{initSubraces();initClsSkills();liveUpdate();});
+  initSubraces();
+}
+function initSubraces(){
+  const rn=$('race').value,r=RACES[rn],sel=$('subrace');
+  sel.innerHTML='';
+  if(r&&r.subraces){
+    Object.entries(r.subraces).forEach(([n,d])=>{
+      const o=document.createElement('option');o.value=n;
+      o.textContent=d.label||n;sel.appendChild(o);
+    });
+  }
+  sel.addEventListener('change',()=>{updateRaceAuto();liveUpdate();});
+  updateRaceAuto();liveUpdate();
+}
+function initClasses(){
+  const sel=$('cls');sel.innerHTML='';
+  Object.entries(CLASSES).forEach(([n,d])=>{
+    const o=document.createElement('option');o.value=n;
+    o.textContent=d.label||n;sel.appendChild(o);
+  });
+  sel.addEventListener('change',initClsSkills);
+}
+function initBgs(){
+  const sel=$('bg');sel.innerHTML='';
+  Object.entries(BACKGROUNDS).forEach(([n,d])=>{
+    const o=document.createElement('option');o.value=n;
+    o.textContent=d.label||n;sel.appendChild(o);
+  });
+  sel.addEventListener('change',updateBgAuto);updateBgAuto();
+}
+
+function updateBgAuto(){
+  const bg=BACKGROUNDS[$('bg').value];
+  $('bg-auto').innerHTML=bg?bg.skills.map(s=>`✓ ${s}`).join('<br>'):'';
+}
+function updateRaceAuto(){
+  const rd=getRD();if(!rd){$('race-auto').innerHTML='';return;}
+  const sk=[...(rd.r.skills||[]),...(rd.sr.skills||[])];
+  $('race-auto').innerHTML=sk.length
+    ?'<div class="mlbl" style="margin-bottom:4px">From Race</div>'+sk.map(s=>`✓ ${s}`).join('<br>'):'';
+}
+
+let picked=new Set();
+function initClsSkills(){
+  const cn=$('cls').value,cls=CLASSES[cn];if(!cls)return;
+  picked=new Set();const cont=$('cls-skills');cont.innerHTML='';
+  $('pick-badge').textContent=`Pick ${cls.pick}`;$('pick-badge').className='pick-badge';
+  const list=cls.skills[0]==='ALL'?ALL_SKILLS.map(s=>s[0]):cls.skills;
+  list.forEach((sk,i)=>{
+    const row=document.createElement('div');row.className='chkrow';
+    row.style.animationDelay=(i*.022)+'s';
+    const cb=document.createElement('input');cb.type='checkbox';
+    cb.id='ck_'+sk.replace(/\s/g,'_');cb.value=sk;
+    cb.addEventListener('change',()=>{
+      if(cb.checked){if(picked.size>=cls.pick){cb.checked=false;return;}picked.add(sk);}
+      else picked.delete(sk);
+      const rem=cls.pick-picked.size;
+      const b=$('pick-badge');
+      if(rem>0){b.textContent=`Pick ${rem} more`;b.className='pick-badge';}
+      else{b.textContent='All chosen ✓';b.className='pick-badge done';}
+    });
+    const lbl=document.createElement('label');lbl.htmlFor='ck_'+sk.replace(/\s/g,'_');lbl.textContent=sk;
+    row.appendChild(cb);row.appendChild(lbl);cont.appendChild(row);
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  LIVE UPDATE
+// ══════════════════════════════════════════════════════════
+
+function updatePortrait(rn){
+  const wrap = document.getElementById('race-portrait-wrap');
+  const img  = document.getElementById('race-portrait-img');
+  const lbl  = document.getElementById('race-portrait-lbl');
+  const info = document.getElementById('race-portrait-info');
+  const src  = RACE_PORTRAITS[rn];
+
+  if(src){
+    wrap.classList.add('visible');
+    if(img.src !== src){
+      img.style.opacity = '0';
+      img.src = src;
+      img.onload = ()=>{ img.style.transition='opacity .4s'; img.style.opacity='1'; };
+    }
+    lbl.textContent = rn;
+
+    const rd = RACES[rn];
+    if(rd){
+      const asiParts = Object.entries(rd.asi||{}).filter(([,v])=>v>0).map(([k,v])=>'+'+v+' '+k.toUpperCase());
+      info.innerHTML =
+        '<div style="font-family:var(--fg);font-size:17px;color:var(--race-col);margin-bottom:6px;text-shadow:0 0 10px var(--race-glow)">'+rn+'</div>'+
+        '<div style="font-family:var(--fb);font-size:13px;color:var(--txt3);font-style:italic;margin-bottom:10px">'+rd.size+' · '+rd.speed+' ft · '+rd.langs+'</div>'+
+        (asiParts.length?'<div style="font-family:var(--fm);font-size:11px;color:var(--green);margin-bottom:8px">'+asiParts.join(' · ')+'</div>':'')+
+        '<div style="display:flex;flex-direction:column;gap:5px">'+
+        (rd.traits||[]).map(t=>{
+          const parts=t.split(':');
+          const name=parts.length>1?parts[0].trim():null;
+          const desc=parts.length>1?parts.slice(1).join(':').trim():t;
+          return '<div style="font-family:var(--fb);font-size:13px;color:var(--txt2);padding:5px 10px;border-left:3px solid rgba(196,154,46,.4);background:rgba(0,0,0,.025);border-radius:0 4px 4px 0">'+(name?'<strong style=\"color:var(--crim2)\">'+name+':</strong> ':'')+desc+'</div>';
+        }).join('')+
+        '</div>';
+    }
+  } else {
+    wrap.classList.remove('visible');
+  }
+}
+
+function liveUpdate(){
+  refreshSlots();
+  const rd=getRD();const bar=$('race-bar');
+  if(!rd){bar.style.display='none';return;}
+  applyRaceColor(rd.rn);
+  updatePortrait(rd.rn);
+  bar.style.display='';
+  const asi=getASI();
+  const parts=Object.entries(asi).filter(([,v])=>v>0).map(([k,v])=>`<span class="rchip asi">+${v} ${k.toUpperCase()}</span>`);
+  const spd=(rd.r.speed||30)+(rd.sr.speed_bonus||0);
+  const ex=[];
+  if(rd.r.swim)ex.push(`<span class="rchip spd">Swim ${rd.r.swim} ft</span>`);
+  if(rd.r.darkvision)ex.push(`<span class="rchip feat">Darkvision ${rd.r.darkvision} ft</span>`);
+  if(rd.r.nat_armor)ex.push(`<span class="rchip feat">Natural Armor (12+DEX)</span>`);
+  const acB=(rd.r.ac_bonus||0)+(rd.sr.ac_bonus||0);
+  if(acB)ex.push(`<span class="rchip feat">+${acB} AC</span>`);
+  bar.innerHTML=
+    `<span class="rb-name">${rd.rn}${rd.srn&&rd.srn!=='(None)'?' — '+rd.srn:''}</span>`+
+    `<div class="rb-langs">${rd.r.langs||''}</div>`+
+    `<div class="rb-chips"><span class="rchip spd">${spd} ft walk</span><span class="rchip">${rd.r.size||'Medium'}</span>${parts.join('')}${ex.join('')}</div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+//  VALIDATION
+// ══════════════════════════════════════════════════════════
+function validate(){
+  const errors=[];
+  const miss=STATS.filter(s=>asgn[s]===null);
+  if(miss.length)errors.push(`Assign ability scores to: ${miss.map(s=>SNAMES[s]).join(', ')}`);
+  const cn=$('cls').value,cls=CLASSES[cn];
+  if(cls&&picked.size<cls.pick)errors.push(`Choose ${cls.pick-picked.size} more class skill${cls.pick-picked.size>1?'s':''}`);
+  return errors;
+}
+function showFeedback(errors){
+  const f=$('val-feedback');
+  if(!errors.length){f.style.display='none';return;}
+  f.style.display='block';
+  f.innerHTML='<strong>⚠ Before inscribing:</strong><br>'+errors.map(e=>`• ${e}`).join('<br>');
+}
+
+// ══════════════════════════════════════════════════════════
+//  CALCULATE
+// ══════════════════════════════════════════════════════════
+function calculate(){
+  const errs=validate();
+  if(errs.length){showFeedback(errs);
+    $('val-feedback').scrollIntoView({behavior:'smooth',block:'center'});return;}
+  showFeedback([]);
+
+  const lv=Math.max(1,Math.min(20,parseInt($('lvl').value)||1));
+  const cn=$('cls').value,bn=$('bg').value;
+  const cls=CLASSES[cn],bg=BACKGROUNDS[bn],rd=getRD();
+  if(!rd||!cls||!bg)return;
+  const{r:race,sr:sub,rn,srn}=rd;
+  const pb=profB(lv);
+  const asi=getASI();
+  const sc={},md={};
+  STATS.forEach(s=>{sc[s]=(asgn[s]||10)+(asi[s]||0);md[s]=abMod(sc[s]);});
+
+  // ── HP
+  const hpL1=Math.max(1,cls.hd+md.con);
+  const hpPL=Math.max(1,Math.floor(cls.hd/2)+1+md.con);
+  const hp=hpL1+(lv-1)*hpPL;
+
+  // ── AC
+  let ac=10+md.dex,acSrc='Unarmored';
+  if(race.nat_armor){const n=12+md.dex;if(n>ac){ac=n;acSrc='Natural Armor (12+DEX)';}}
+  const acB=(race.ac_bonus||0)+(sub.ac_bonus||0);ac+=acB;
+  if(acB&&acSrc==='Unarmored')acSrc=sub.ac_bonus?'Plated Hide':'Thick Hide';
+  else if(acB)acSrc+=sub.ac_bonus?' + Plated Hide':' + Thick Hide';
+
+  // ── Speed
+  const spd=(race.speed||30)+(sub.speed_bonus||0);
+  const spdS=race.swim?`+ Swim ${race.swim} ft`:'';
+
+  // ── Passive Perception
+  const allProf=new Set([...picked,...bg.skills,...(race.skills||[]),...(sub.skills||[])]);
+  const percP=allProf.has('Perception');
+  const pp=10+md.wis+(percP?pb:0);
+
+  // ── SET VITALS
+  const set=(id,v)=>{const e=$(id);if(e)e.textContent=v;};
+  set('r-lvl',`Level ${lv} ${cn}`);
+  set('r-hp',hp);
+  set('r-hp-s',`Hit Die: d${cls.hd}`);
+  set('r-ac',ac);
+  set('r-ac-s',acSrc);
+  set('r-prof',fmt(pb));
+  set('r-prof-s',`Levels 1–4: +2, 5–8: +3...`);
+  set('r-spd',spd+' ft');
+  set('r-spd-s',spdS);
+  set('r-init',fmt(md.dex));
+  set('r-pp',pp);
+  set('r-pp-s',percP?'Perception proficient':'No Perception prof.');
+  $('r-id').innerHTML=`${rn}${srn&&srn!=='(None)'?' ('+srn+')':''}<br>${cn} &nbsp;·&nbsp; ${bn}`;
+
+  // ── SCORES TABLE
+  const tb=$('scores-body');tb.innerHTML='';
+  const SA={str:'STR',dex:'DEX',con:'CON',int:'INT',wis:'WIS',cha:'CHA'};
+  STATS.forEach((s,i)=>{
+    const sp=cls.saves.includes(s),sv=md[s]+(sp?pb:0);
+    const bon=asi[s]||0;const base=asgn[s]||10;
+    const tr=document.createElement('tr');tr.style.animationDelay=(i*.06)+'s';
+    tr.innerHTML=`
+      <td><span class="sn">${SA[s]}</span><span class="sf">${SNAMES[s]}</span></td>
+      <td class="sc">${sc[s]}<span style="font-family:var(--fm);font-size:11px;color:var(--txt3);margin-left:5px">${bon>0?'('+base+'+'+bon+')':'('+base+')'}</span></td>
+      <td class="${md[s]>=0?'mpos':'mneg'}" style="font-size:18px">${fmt(md[s])}</td>
+      <td style="font-size:16px;font-weight:700">${fmt(sv)}${sp?' <span class="sdot">●</span>':''}</td>`;
+    tb.appendChild(tr);
+  });
+
+  // ── SKILLS
+  const so=$('skills-out');so.innerHTML='';
+  ALL_SKILLS.forEach(([sk,ab],i)=>{
+    const p=allProf.has(sk),v=md[ab]+(p?pb:0);
+    const d=document.createElement('div');d.className='skrow'+(p?' prof':'');
+    d.style.animationDelay=(i*.015)+'s';
+    d.innerHTML=`<div class="skl"><div class="skdot${p?' p':''}"></div><span class="skname">${sk}</span><span class="skattr"> ${ab.toUpperCase()}</span></div><span class="skval">${fmt(v)}</span>`;
+    so.appendChild(d);
+  });
+
+  // ── TRAITS
+  const tl=$('traits-list');tl.innerHTML='';
+  let di=0;
+  const addT=(arr,type,dc)=>{
+    arr.forEach(t=>{
+      const div=document.createElement('div');
+      div.className=`ti ${type}-t`;div.style.animationDelay=(di*.04)+'s';di++;
+      const parts=t.split(':');
+      const nm=parts.length>1?parts[0].trim():null;
+      const desc=parts.length>1?parts.slice(1).join(':').trim():t;
+      const stag=dc==='race'?rn:dc==='cls'?cn:bn;
+      div.innerHTML=`<div class="tdot ${dc}"></div><span class="tsrc ${dc}">${stag}</span><div class="tbody">${nm?`<strong>${nm}:</strong> `:''}${desc}</div>`;
+      tl.appendChild(div);
+    });
+  };
+  addT(race.traits||[],'race','race');
+  addT(sub.traits||[],'race','race');
+  addT(cls.features||[],'cls','cls');
+  if(bg.feat)addT([bg.feat],'bg','bg');
+
+  // ── SPELLCASTING
+  const sb=$('spell-box');
+  if(cls.spell&&lv>=cls.spell.start){
+    const sp=cls.spell;
+    const atk=md[sp.ab]+pb,dc=8+md[sp.ab]+pb;
+    const ord=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th'];
+    const tbl=SLOTS[sp.type];const slotArr=(tbl&&tbl[lv])||[];
+    const slotParts=slotArr.map((s,i)=>s>0?`${s} ${ord[i]}-level`:null).filter(Boolean);
+    $('spell-ttl').textContent=`${cn} Spellcasting · ${sp.type} Caster`;
+    const sg=$('spell-stats');sg.innerHTML='';
+    const items=[['Ability',SNAMES[sp.ab]],['Spell Attack',fmt(atk)],['Save DC',String(dc)]];
+    if(sp.cantrips)items.push(['Cantrips',String(sp.cantrips)]);
+    items.forEach(([l,v])=>{
+      const c=document.createElement('div');c.className='ss';
+      c.innerHTML=`<div class="ss-lbl">${l}</div><div class="ss-val">${v}</div>`;
+      sg.appendChild(c);
+    });
+    const sw=$('slots-section'),chips=$('slot-chips');chips.innerHTML='';
+    if(slotParts.length){
+      sw.style.display='';
+      slotParts.forEach(s=>{const c=document.createElement('span');c.className='schip';c.textContent=s;chips.appendChild(c);});
+    }else sw.style.display='none';
+    $('spell-note').textContent=sp.shortRest
+      ?'Warlock — Spell slots recover on a Short Rest (Pact Magic).'
+      :sp.type==='Half'?`Half Caster — spellcasting begins at Level ${sp.start}.`
+      :'Full Caster — spellcasting available from Level 1.';
+    sb.style.display='';
+  }else sb.style.display='none';
+
+  // ── SHOW RESULTS
+  const res=$('results');res.style.display='block';
+  const wrap=res.querySelector('.results-wrap');
+  wrap.style.animation='none';void wrap.offsetWidth;wrap.style.animation='';
+  setTimeout(()=>res.scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+
+// ══════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  buildArrayUI();
+  initRaces();
+  initClasses();
+  initBgs();
+  initClsSkills();
+  $('lvl').addEventListener('input',liveUpdate);
+  applyRaceColor('Humanian');
+  liveUpdate();
+});
+</script>
+</body>
+</html>
